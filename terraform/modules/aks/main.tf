@@ -1,0 +1,35 @@
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = var.cluster_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  dns_prefix          = var.dns_prefix
+
+  kubernetes_version = var.kubernetes_version
+
+  default_node_pool {
+    name            = "nodepool1"
+    node_count      = var.node_count
+    vm_size         = var.vm_size
+    vnet_subnet_id  = var.subnet_id
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  azure_active_directory_role_based_access_control {
+    managed = true
+    azure_rbac_enabled = true
+  }
+
+  oms_agent {
+    log_analytics_workspace_id = var.log_analytics_workspace_id
+  }
+
+  network_profile {
+    network_plugin    = "azure"
+    load_balancer_sku = "standard"
+  }
+
+  tags = var.tags
+}
