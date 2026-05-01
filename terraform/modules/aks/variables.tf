@@ -4,7 +4,7 @@ variable "resource_group_name" {}
 variable "dns_prefix" {}
 
 variable "kubernetes_version" {
-  default = "1.29.2"
+  default = "1.34.4"
 }
 
 variable "node_count" {
