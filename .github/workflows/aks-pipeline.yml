@@ -38,13 +38,6 @@ jobs:
       run: terraform init
       working-directory: terraform
 
-    # 🔥 FIX: Remove old resources from state (one-time fix)
-    - name: Terraform State Cleanup
-      run: |
-        terraform state rm azurerm_virtual_network.aks_vnet || true
-        terraform state rm azurerm_subnet.aks_subnet || true
-      working-directory: terraform
-
     - name: Terraform Plan
       run: terraform plan
       working-directory: terraform
