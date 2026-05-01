@@ -15,14 +15,10 @@ resource "azurerm_subnet" "aks_subnet" {
   virtual_network_name = azurerm_virtual_network.aks_vnet.name
   address_prefixes     = ["10.1.0.0/16"]
 }
-
-resource "azurerm_log_analytics_workspace" "log" {
+data "azurerm_log_analytics_workspace" "log" {
   name                = "aks-log-workspace"
-  location            = var.location
-  resource_group_name = data.azurerm_resource_group.aks_rg.name
-  sku                 = "PerGB2018"
+  resource_group_name = var.resource_group_name
 }
-
 module "aks" {
   source = "./modules/aks"
 
@@ -35,7 +31,7 @@ module "aks" {
   vm_size    = var.vm_size
 
   subnet_id = azurerm_subnet.aks_subnet.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.log.id
 
   tags = {
     Environment = var.environment
